@@ -8,8 +8,9 @@
 <p align="justify">
   <strong>IParamsModal:</strong>
 </p>
+
 | Nome        | Tipo       | Descrição                                                    |
-| ----------- | ---------- | ------------------------------------------------------------ |
+| ----------- | ---------- | -----------------------------------------------------------  |
 | multiple    | boolean    | True - envia todos os emails selecionados; False - envia individualmente o email|
 | channel     | string     | Nome do canal (HQs, personagens e criadores)                 |
 | id          | number     | Identificador do registro                                    |
@@ -21,6 +22,7 @@
 | name        | string[]   | Lista de nomes do canal relacionado                          |
 | active      | boolean    | True - mostra o item selecionado; False - mostra o item não selecionado|
 
+<br />
 <p align="justify">
   <strong>IParamType:</strong>
     - channel

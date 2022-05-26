@@ -136,3 +136,7 @@ git clone https://github.com/React-Bootcamp-WoMarkersCode/certificate-generator
 
 :memo: Gravar as preferências em banco de dados;
 
+| Nome        | Tipo       | Descrição                                                    |
+| ----------- | ---------- | ------------------------------------------------------------ |
+| channel     | string     | Nome do canal buscado do parâmetro "channel" da rota         |
+
