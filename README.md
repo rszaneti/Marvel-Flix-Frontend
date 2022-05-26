@@ -145,7 +145,7 @@ git clone https://github.com/rszaneti/marvel-flix-backend
   Back-end:
 </p>
 
-  > Heroku
+  > Hospedado no Microsoft Azure: API - https://test-softdesign.eadconcept.app.br
 
 :warning: Caso mude o servidor de serviço de e-mail, em Marvel-Flix-Backend, altere a variável de ambiente, em Marvel-Flix-Frontend, no arquivo .env REACT_APP_SERVICE_MAIL para novo endereço do servidor.
 
