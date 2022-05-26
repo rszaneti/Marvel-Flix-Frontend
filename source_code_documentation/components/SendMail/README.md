@@ -25,6 +25,7 @@
 | description | string     | Descrição do item                                            |
 | modified    | Date, null | Data de modificação                                          |
 | pageCount   | number     | Número de páginas                                            |
+| issueNumber | number     | Número da edição                                             |
 | thumbnail   | string     | Imagem                                                       |
 
 <p align="justify">
@@ -39,6 +40,7 @@
 | description | string     | Descrição do item                                            |
 | modified    | Date, null | Data de modificação                                          |
 | pageCount   | number     | Número de páginas                                            |
+| issueNumber | number     | Número da edição                                             |
 | thumbnail   | string     | Imagem                                                       |
 | nameChannel | string     | Nome do canal relacionado                                    |
 | name        | string[]   | Lista de nomes do canal relacionado                          |
