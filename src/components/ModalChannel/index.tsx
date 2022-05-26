@@ -20,8 +20,9 @@ interface IEmailSelect {
   title: string;
   description: string;
   thumbnail: string;
-  modified: Date;
+  modified: string;
   pageCount: number;
+  issueNumber: number;
 }
 
 interface IParamsModal {
@@ -30,8 +31,9 @@ interface IParamsModal {
   id: number;
   title: string;
   description: string;
-  modified: Date;
+  modified: string;
   pageCount: number;
+  issueNumber: number;
   thumbnail: string;
   image: string;
   nameChannel: string;
@@ -45,8 +47,9 @@ interface IParamTypes {
     id: number;
     title: string;
     description: string;
-    modified: Date;
+    modified: string;
     pageCount: number;
+    issueNumber: number;
     thumbnail: string;
     image: string;
     nameChannel: string;
@@ -99,6 +102,7 @@ const ModalChannel: React.FC<IParamTypes> = ({ data }) => {
           thumbnail: data.thumbnail,
           modified: data.modified,
           pageCount: data.pageCount,
+          issueNumber: data.issueNumber,
         });
 
         localStorage.setItem(
@@ -117,6 +121,7 @@ const ModalChannel: React.FC<IParamTypes> = ({ data }) => {
           thumbnail: data.thumbnail,
           modified: data.modified,
           pageCount: data.pageCount,
+          issueNumber: data.issueNumber,
         },
       ];
 
@@ -139,6 +144,7 @@ const ModalChannel: React.FC<IParamTypes> = ({ data }) => {
       description: data.description,
       modified: data.modified,
       pageCount: data.pageCount,
+      issueNumber: data.issueNumber,
       thumbnail: data.thumbnail,
       image: data.image,
       nameChannel: data.nameChannel,
@@ -208,18 +214,31 @@ const ModalChannel: React.FC<IParamTypes> = ({ data }) => {
         </CssTooltip>
       </div>
 
-      <div className="modal-channel-box-info">
-        <FaRegCalendarAlt
-          style={{ marginRight: '10px' }}
-          className="modal-channel-icon-check-active"
-          size="20"
-        />
-
-        <p className="global-paragraph">Modificado em: {data.modified}</p>
-      </div>
-
       <div className="modal-channel-box-description">
         <div>
+          <div className="modal-channel-box-info">
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                marginBottom: '10px',
+              }}
+            >
+              <FaRegCalendarAlt
+                style={{ marginRight: '10px' }}
+                className="modal-channel-icon-check-active"
+                size="20"
+              />
+
+              <p className="global-paragraph">Modificado em: {data.modified}</p>
+            </div>
+
+            {data.issueNumber ? (
+              <p className="global-paragraph">
+                Nº da Edição: {data.issueNumber}
+              </p>
+            ) : null}
+          </div>
           <p className="modal-channel-box-description-p">{data.description}</p>
         </div>
         <div>

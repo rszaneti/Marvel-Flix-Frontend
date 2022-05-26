@@ -141,7 +141,7 @@ button {
 
 .global-button:hover {
   background: $color-burgundy;
-  transition: background 0.2s;
+  transition: background 0.3s;
 }
 
 .global-button button:disabled,
@@ -151,3 +151,25 @@ button[disabled]{
   color: #666666;
 }
 
+
+.global-button-clear {
+  background: $color-burgundy;
+  color: $color-white;
+  font-weight: 400;
+  font-size: 1.6rem;
+  text-transform: uppercase;
+  border-radius: 8px;
+  border: 0;
+  padding: 8px 25px;
+  width: fit-content;
+  height: 100%;
+  max-height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.global-button-clear:hover {
+  background: $color-red;
+  transition: background 0.3s;
+}

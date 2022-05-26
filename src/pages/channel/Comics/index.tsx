@@ -13,6 +13,7 @@ import { FaCheckCircle } from 'react-icons/fa';
 import { HiMail } from 'react-icons/hi';
 
 // Context
+import { useDeselectAll } from '../../../context/DeselectAllContext';
 import { ErrorContext } from '../../../context/ErrorContext';
 import { useSendMail } from '../../../context/SendMailContext';
 
@@ -114,8 +115,9 @@ interface IEmailSelect {
   title: string;
   description: string;
   thumbnail: string;
-  modified: Date;
+  modified: string;
   pageCount: number;
+  issueNumber: number;
 }
 
 interface IParamsModal {
@@ -124,8 +126,9 @@ interface IParamsModal {
   id: number;
   title: string;
   description: string;
-  modified: Date;
+  modified: string;
   pageCount: number;
+  issueNumber: number;
   thumbnail: string;
   image: string;
   nameChannel: string;
@@ -143,6 +146,7 @@ const Comics: React.FC<IParamTypes> = ({ channel }) => {
   // Context
   const { ErrorMessage } = useContext(ErrorContext);
   const { funcOpenModalMailChannel, openModalMailChannel } = useSendMail();
+  const { deselectAll } = useDeselectAll();
 
   // State
   const [loading, setLoading] = useState(false);
@@ -211,7 +215,7 @@ const Comics: React.FC<IParamTypes> = ({ channel }) => {
     }
 
     loadList();
-  }, [ErrorMessage, channel, page, order, orderBy, searchText]);
+  }, [ErrorMessage, channel, page, order, orderBy, searchText, deselectAll]);
 
   const handleChangePage = useCallback(
     (event: ChangeEvent<unknown>, value: number) => {
@@ -226,8 +230,9 @@ const Comics: React.FC<IParamTypes> = ({ channel }) => {
       title: string,
       description: string,
       thumbnail: string,
-      modified: Date,
+      modified_date: Date,
       pageCount: number,
+      issueNumber: number,
     ) => {
       const channelId = localStorage.getItem(
         `@TestSoftDesign:${channel || 'comics'}`,
@@ -269,8 +274,13 @@ const Comics: React.FC<IParamTypes> = ({ channel }) => {
             title,
             description,
             thumbnail,
-            modified,
+            modified: modified_date
+              ? `${String(modified_date).substring(8, 10)}/${String(
+                  modified_date,
+                ).substring(5, 7)}/${String(modified_date).substring(0, 4)}`
+              : '',
             pageCount,
+            issueNumber,
           });
 
           localStorage.setItem(
@@ -300,8 +310,13 @@ const Comics: React.FC<IParamTypes> = ({ channel }) => {
             title,
             description,
             thumbnail,
-            modified,
+            modified: modified_date
+              ? `${String(modified_date).substring(8, 10)}/${String(
+                  modified_date,
+                ).substring(5, 7)}/${String(modified_date).substring(0, 4)}`
+              : '',
             pageCount,
+            issueNumber,
           },
         ];
 
@@ -356,8 +371,9 @@ const Comics: React.FC<IParamTypes> = ({ channel }) => {
       id: number,
       title: string,
       description: string,
-      modified: Date,
+      modified_date: Date,
       pageCount: number,
+      issueNumber: number,
       thumbnail: string,
       image: string,
       nameChannel: string,
@@ -370,8 +386,13 @@ const Comics: React.FC<IParamTypes> = ({ channel }) => {
         id,
         title,
         description,
-        modified,
+        modified: modified_date
+          ? `${String(modified_date).substring(8, 10)}/${String(
+              modified_date,
+            ).substring(5, 7)}/${String(modified_date).substring(0, 4)}`
+          : '',
         pageCount,
+        issueNumber,
         thumbnail,
         image,
         nameChannel,
@@ -392,8 +413,9 @@ const Comics: React.FC<IParamTypes> = ({ channel }) => {
       id: number,
       title: string,
       description: string,
-      modified: Date,
+      modified_date: Date,
       pageCount: number,
+      issueNumber: number,
       thumbnail: string,
       image: string,
       nameChannel: string,
@@ -406,8 +428,13 @@ const Comics: React.FC<IParamTypes> = ({ channel }) => {
         id,
         title,
         description,
-        modified,
+        modified: modified_date
+          ? `${String(modified_date).substring(8, 10)}/${String(
+              modified_date,
+            ).substring(5, 7)}/${String(modified_date).substring(0, 4)}`
+          : '',
         pageCount,
+        issueNumber,
         thumbnail,
         image,
         nameChannel,
@@ -517,10 +544,8 @@ const Comics: React.FC<IParamTypes> = ({ channel }) => {
                       variant="outlined"
                     >
                       <option value="title">Título</option>
-                      <option value="focDate">focDate</option>
-                      <option value="onsaleDate">onsaleDate</option>
-                      <option value="issueNumber">issueNumber</option>
-                      <option value="modified">modified</option>
+                      <option value="issueNumber">Nº da edição</option>
+                      <option value="modified">Modificado em</option>
                     </CssTextField>
                   </li>
                   <li>
@@ -576,6 +601,7 @@ const Comics: React.FC<IParamTypes> = ({ channel }) => {
                         r.description,
                         r.modified,
                         r.pageCount,
+                        r.issueNumber,
                         `${r.thumbnail.path}/landscape_xlarge.${r.thumbnail.extension}`,
                         `${r.thumbnail.path}/landscape_incredible.${r.thumbnail.extension}`,
                         r.characters.items.length ? 'Personagens' : '',
@@ -595,6 +621,7 @@ const Comics: React.FC<IParamTypes> = ({ channel }) => {
                           r.description,
                           r.modified,
                           r.pageCount,
+                          r.issueNumber,
                           `${r.thumbnail.path}/landscape_xlarge.${r.thumbnail.extension}`,
                           `${r.thumbnail.path}/landscape_incredible.${r.thumbnail.extension}`,
                           r.characters.items.length ? 'Personagens' : '',
@@ -618,6 +645,7 @@ const Comics: React.FC<IParamTypes> = ({ channel }) => {
                               `${r.thumbnail.path}/landscape_xlarge.${r.thumbnail.extension}`,
                               r.modified,
                               r.pageCount,
+                              r.issueNumber,
                             )
                           }
                         >
@@ -643,6 +671,7 @@ const Comics: React.FC<IParamTypes> = ({ channel }) => {
                               r.description,
                               r.modified,
                               r.pageCount,
+                              r.issueNumber,
                               `${r.thumbnail.path}/landscape_xlarge.${r.thumbnail.extension}`,
                               `${r.thumbnail.path}/landscape_incredible.${r.thumbnail.extension}`,
                               r.characters.items.length ? 'Personagens' : '',

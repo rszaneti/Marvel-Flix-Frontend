@@ -13,6 +13,7 @@ import { FaCheckCircle } from 'react-icons/fa';
 import { HiMail } from 'react-icons/hi';
 
 // Context
+import { useDeselectAll } from '../../../context/DeselectAllContext';
 import { ErrorContext } from '../../../context/ErrorContext';
 import { useSendMail } from '../../../context/SendMailContext';
 
@@ -96,8 +97,9 @@ interface IEmailSelect {
   title: string;
   description: string;
   thumbnail: string;
-  modified: Date;
+  modified: string;
   pageCount: number;
+  issueNumber: number;
 }
 
 interface IParamsModal {
@@ -106,8 +108,9 @@ interface IParamsModal {
   id: number;
   title: string;
   description: string;
-  modified: Date;
+  modified: string;
   pageCount: number;
+  issueNumber: number;
   thumbnail: string;
   image: string;
   nameChannel: string;
@@ -123,6 +126,7 @@ const Characters: React.FC<IParamTypes> = ({ channel }) => {
   const classesModal = CssModalStyles();
 
   // Context
+  const { deselectAll } = useDeselectAll();
   const { ErrorMessage } = useContext(ErrorContext);
   const { funcOpenModalMailChannel, openModalMailChannel } = useSendMail();
 
@@ -195,7 +199,7 @@ const Characters: React.FC<IParamTypes> = ({ channel }) => {
     }
 
     loadList();
-  }, [ErrorMessage, channel, page, order, orderBy, searchText]);
+  }, [ErrorMessage, channel, page, order, orderBy, searchText, deselectAll]);
 
   const handleChangePage = useCallback(
     (event: ChangeEvent<unknown>, value: number) => {
@@ -210,8 +214,9 @@ const Characters: React.FC<IParamTypes> = ({ channel }) => {
       title: string,
       description: string,
       thumbnail: string,
-      modified: Date,
+      modified_date: Date,
       pageCount: number,
+      issueNumber: number,
     ) => {
       const channelId = localStorage.getItem(
         `@TestSoftDesign:${channel || 'comics'}`,
@@ -253,8 +258,13 @@ const Characters: React.FC<IParamTypes> = ({ channel }) => {
             title,
             description,
             thumbnail,
-            modified,
+            modified: modified_date
+              ? `${String(modified_date).substring(8, 10)}/${String(
+                  modified_date,
+                ).substring(5, 7)}/${String(modified_date).substring(0, 4)}`
+              : '',
             pageCount,
+            issueNumber,
           });
 
           localStorage.setItem(
@@ -284,8 +294,13 @@ const Characters: React.FC<IParamTypes> = ({ channel }) => {
             title,
             description,
             thumbnail,
-            modified,
+            modified: modified_date
+              ? `${String(modified_date).substring(8, 10)}/${String(
+                  modified_date,
+                ).substring(5, 7)}/${String(modified_date).substring(0, 4)}`
+              : '',
             pageCount,
+            issueNumber,
           },
         ];
 
@@ -340,8 +355,9 @@ const Characters: React.FC<IParamTypes> = ({ channel }) => {
       id: number,
       title: string,
       description: string,
-      modified: Date,
+      modified_date: Date,
       pageCount: number,
+      issueNumber: number,
       thumbnail: string,
       image: string,
       nameChannel: string,
@@ -354,8 +370,13 @@ const Characters: React.FC<IParamTypes> = ({ channel }) => {
         id,
         title,
         description,
-        modified,
+        modified: modified_date
+          ? `${String(modified_date).substring(8, 10)}/${String(
+              modified_date,
+            ).substring(5, 7)}/${String(modified_date).substring(0, 4)}`
+          : '',
         pageCount,
+        issueNumber,
         thumbnail,
         image,
         nameChannel,
@@ -376,8 +397,9 @@ const Characters: React.FC<IParamTypes> = ({ channel }) => {
       id: number,
       title: string,
       description: string,
-      modified: Date,
+      modified_date: Date,
       pageCount: number,
+      issueNumber: number,
       thumbnail: string,
       image: string,
       nameChannel: string,
@@ -390,8 +412,13 @@ const Characters: React.FC<IParamTypes> = ({ channel }) => {
         id,
         title,
         description,
-        modified,
+        modified: modified_date
+          ? `${String(modified_date).substring(8, 10)}/${String(
+              modified_date,
+            ).substring(5, 7)}/${String(modified_date).substring(0, 4)}`
+          : '',
         pageCount,
+        issueNumber,
         thumbnail,
         image,
         nameChannel,
@@ -557,6 +584,7 @@ const Characters: React.FC<IParamTypes> = ({ channel }) => {
                         r.description,
                         r.modified,
                         0,
+                        0,
                         `${r.thumbnail.path}/landscape_xlarge.${r.thumbnail.extension}`,
                         `${r.thumbnail.path}/landscape_incredible.${r.thumbnail.extension}`,
                         r.comics.items.length ? 'Histórias em Quadrinhos' : '',
@@ -575,6 +603,7 @@ const Characters: React.FC<IParamTypes> = ({ channel }) => {
                           r.name,
                           r.description,
                           r.modified,
+                          0,
                           0,
                           `${r.thumbnail.path}/landscape_xlarge.${r.thumbnail.extension}`,
                           `${r.thumbnail.path}/landscape_incredible.${r.thumbnail.extension}`,
@@ -601,6 +630,7 @@ const Characters: React.FC<IParamTypes> = ({ channel }) => {
                               `${r.thumbnail.path}/landscape_xlarge.${r.thumbnail.extension}`,
                               r.modified,
                               0,
+                              0,
                             )
                           }
                         >
@@ -625,6 +655,7 @@ const Characters: React.FC<IParamTypes> = ({ channel }) => {
                               r.name,
                               r.description,
                               r.modified,
+                              0,
                               0,
                               `${r.thumbnail.path}/landscape_xlarge.${r.thumbnail.extension}`,
                               `${r.thumbnail.path}/landscape_incredible.${r.thumbnail.extension}`,

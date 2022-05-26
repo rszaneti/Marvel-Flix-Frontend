@@ -3,18 +3,21 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import SendMail from '.';
 
 const propsParams = {
-  multiple: true,
-  channel: 'channel',
-  id: 0,
-  title: 'title',
-  description: 'description',
-  modified: null,
-  pageCount: 0,
-  thumbnail: 'thumbnail',
-  image: 'image',
-  nameChannel: 'nameChannel',
-  name: ['name'],
-  active: false,
+  data: {
+    multiple: true,
+    channel: 'channel',
+    id: 0,
+    title: 'title',
+    description: 'description',
+    modified: '',
+    pageCount: 0,
+    issueNumber: 0,
+    thumbnail: 'thumbnail',
+    image: 'image',
+    nameChannel: 'nameChannel',
+    name: ['name'],
+    active: false,
+  },
 };
 
 describe('SendMail Component', () => {

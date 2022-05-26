@@ -9,6 +9,7 @@ import Routes from './routes';
 
 // Context
 import { ActiveMenuProvider } from './context/ActiveMenuContext';
+import { DeselectAllProvider } from './context/DeselectAllContext';
 import { ErrorProvider } from './context/ErrorContext';
 import { SendMailProvider } from './context/SendMailContext';
 
@@ -24,7 +25,9 @@ const App: React.FC = () => {
         <ErrorProvider>
           <SendMailProvider>
             <ActiveMenuProvider>
-              <Routes />
+              <DeselectAllProvider>
+                <Routes />
+              </DeselectAllProvider>
             </ActiveMenuProvider>
           </SendMailProvider>
         </ErrorProvider>

@@ -4,6 +4,7 @@ import { Modal, Fade, Backdrop } from '@material-ui/core';
 
 // Context
 import { useSendMail } from '../../../context/SendMailContext';
+import { useDeselectAll } from '../../../context/DeselectAllContext';
 
 // Components
 import SendMail from '../../SendMail';
@@ -19,8 +20,9 @@ interface IParamsModal {
   id: number;
   title: string;
   description: string;
-  modified: Date | null;
+  modified: string;
   pageCount: number;
+  issueNumber: number;
   thumbnail: string;
   image: string;
   nameChannel: string;
@@ -39,6 +41,7 @@ const Footer: React.FC = () => {
 
   // Context
   const { funcOpenModalMailFooter, openModalMailFooter } = useSendMail();
+  const { handleDeselectAll } = useDeselectAll();
 
   // State
   const [dataModalMail, setDataModalMail] = useState<IParamsModal>(
@@ -52,8 +55,9 @@ const Footer: React.FC = () => {
       id: 0,
       title: '',
       description: '',
-      modified: null,
+      modified: '',
       pageCount: 0,
+      issueNumber: 0,
       thumbnail: '',
       image: '',
       nameChannel: '',
@@ -64,9 +68,12 @@ const Footer: React.FC = () => {
     funcOpenModalMailFooter(true);
   }, [channel, funcOpenModalMailFooter]);
 
-  const handleDeselectAll = useCallback(async () => {
-    localStorage.removeItem(`@TestSoftDesign:${channel || 'comics'}`);
-  }, [channel]);
+  const handleDeselectAllItens = useCallback(async () => {
+    localStorage.removeItem('@TestSoftDesign:comics');
+    localStorage.removeItem('@TestSoftDesign:characters');
+    localStorage.removeItem('@TestSoftDesign:creators');
+    handleDeselectAll();
+  }, [handleDeselectAll]);
 
   return (
     <div className="footer-container">
@@ -90,6 +97,7 @@ const Footer: React.FC = () => {
       </Modal>
 
       <button
+        style={{ marginRight: '10px' }}
         type="button"
         className="global-button"
         onClick={() => handleOpenModalMail()}
@@ -97,9 +105,10 @@ const Footer: React.FC = () => {
         Enviar E-mail dos itens selecionados
       </button>
       <button
+        style={{ marginLeft: '10px' }}
         type="button"
         className="global-button-clear"
-        onClick={handleDeselectAll}
+        onClick={handleDeselectAllItens}
       >
         Desmarcar todos
       </button>

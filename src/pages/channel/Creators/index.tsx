@@ -13,6 +13,7 @@ import { FaCheckCircle } from 'react-icons/fa';
 import { HiMail } from 'react-icons/hi';
 
 // Context
+import { useDeselectAll } from '../../../context/DeselectAllContext';
 import { ErrorContext } from '../../../context/ErrorContext';
 import { useSendMail } from '../../../context/SendMailContext';
 
@@ -84,8 +85,9 @@ interface IEmailSelect {
   title: string;
   description: string;
   thumbnail: string;
-  modified: Date;
+  modified: string;
   pageCount: number;
+  issueNumber: number;
 }
 
 interface IParamsModal {
@@ -94,8 +96,9 @@ interface IParamsModal {
   id: number;
   title: string;
   description: string;
-  modified: Date;
+  modified: string;
   pageCount: number;
+  issueNumber: number;
   thumbnail: string;
   image: string;
   nameChannel: string;
@@ -111,6 +114,7 @@ const Creators: React.FC<IParamTypes> = ({ channel }) => {
   const classesModal = CssModalStyles();
 
   // Context
+  const { deselectAll } = useDeselectAll();
   const { ErrorMessage } = useContext(ErrorContext);
   const { funcOpenModalMailChannel, openModalMailChannel } = useSendMail();
 
@@ -183,7 +187,7 @@ const Creators: React.FC<IParamTypes> = ({ channel }) => {
     }
 
     loadList();
-  }, [ErrorMessage, channel, page, order, orderBy, searchText]);
+  }, [ErrorMessage, channel, page, order, orderBy, searchText, deselectAll]);
 
   const handleChangePage = useCallback(
     (event: ChangeEvent<unknown>, value: number) => {
@@ -198,8 +202,9 @@ const Creators: React.FC<IParamTypes> = ({ channel }) => {
       title: string,
       description: string,
       thumbnail: string,
-      modified: Date,
+      modified_date: Date,
       pageCount: number,
+      issueNumber: number,
     ) => {
       const channelId = localStorage.getItem(
         `@TestSoftDesign:${channel || 'comics'}`,
@@ -241,8 +246,13 @@ const Creators: React.FC<IParamTypes> = ({ channel }) => {
             title,
             description,
             thumbnail,
-            modified,
+            modified: modified_date
+              ? `${String(modified_date).substring(8, 10)}/${String(
+                  modified_date,
+                ).substring(5, 7)}/${String(modified_date).substring(0, 4)}`
+              : '',
             pageCount,
+            issueNumber,
           });
 
           localStorage.setItem(
@@ -272,8 +282,13 @@ const Creators: React.FC<IParamTypes> = ({ channel }) => {
             title,
             description,
             thumbnail,
-            modified,
+            modified: modified_date
+              ? `${String(modified_date).substring(8, 10)}/${String(
+                  modified_date,
+                ).substring(5, 7)}/${String(modified_date).substring(0, 4)}`
+              : '',
             pageCount,
+            issueNumber,
           },
         ];
 
@@ -328,8 +343,9 @@ const Creators: React.FC<IParamTypes> = ({ channel }) => {
       id: number,
       title: string,
       description: string,
-      modified: Date,
+      modified_date: Date,
       pageCount: number,
+      issueNumber: number,
       thumbnail: string,
       image: string,
       nameChannel: string,
@@ -342,8 +358,13 @@ const Creators: React.FC<IParamTypes> = ({ channel }) => {
         id,
         title,
         description,
-        modified,
+        modified: modified_date
+          ? `${String(modified_date).substring(8, 10)}/${String(
+              modified_date,
+            ).substring(5, 7)}/${String(modified_date).substring(0, 4)}`
+          : '',
         pageCount,
+        issueNumber,
         thumbnail,
         image,
         nameChannel,
@@ -364,8 +385,9 @@ const Creators: React.FC<IParamTypes> = ({ channel }) => {
       id: number,
       title: string,
       description: string,
-      modified: Date,
+      modified_date: Date,
       pageCount: number,
+      issueNumber: number,
       thumbnail: string,
       image: string,
       nameChannel: string,
@@ -378,8 +400,13 @@ const Creators: React.FC<IParamTypes> = ({ channel }) => {
         id,
         title,
         description,
-        modified,
+        modified: modified_date
+          ? `${String(modified_date).substring(8, 10)}/${String(
+              modified_date,
+            ).substring(5, 7)}/${String(modified_date).substring(0, 4)}`
+          : '',
         pageCount,
+        issueNumber,
         thumbnail,
         image,
         nameChannel,
@@ -548,6 +575,7 @@ const Creators: React.FC<IParamTypes> = ({ channel }) => {
                         '',
                         r.modified,
                         0,
+                        0,
                         `${r.thumbnail.path}/landscape_xlarge.${r.thumbnail.extension}`,
                         `${r.thumbnail.path}/landscape_incredible.${r.thumbnail.extension}`,
                         r.comics.items.length ? 'Personagens' : '',
@@ -566,6 +594,7 @@ const Creators: React.FC<IParamTypes> = ({ channel }) => {
                           r.fullName,
                           '',
                           r.modified,
+                          0,
                           0,
                           `${r.thumbnail.path}/landscape_xlarge.${r.thumbnail.extension}`,
                           `${r.thumbnail.path}/landscape_incredible.${r.thumbnail.extension}`,
@@ -592,6 +621,7 @@ const Creators: React.FC<IParamTypes> = ({ channel }) => {
                               `${r.thumbnail.path}/landscape_xlarge.${r.thumbnail.extension}`,
                               r.modified,
                               0,
+                              0,
                             )
                           }
                         >
@@ -616,6 +646,7 @@ const Creators: React.FC<IParamTypes> = ({ channel }) => {
                               r.fullName,
                               '',
                               r.modified,
+                              0,
                               0,
                               `${r.thumbnail.path}/landscape_xlarge.${r.thumbnail.extension}`,
                               `${r.thumbnail.path}/landscape_incredible.${r.thumbnail.extension}`,

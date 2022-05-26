@@ -33,8 +33,9 @@ interface IEmailSelect {
   id: string;
   title: string;
   description: string;
-  modified: Date | null;
+  modified: string;
   pageCount: number;
+  issueNumber: number;
   thumbnail: string;
 }
 
@@ -45,8 +46,9 @@ interface IParamTypes {
     id: number;
     title: string;
     description: string;
-    modified: Date | null;
+    modified: string;
     pageCount: number;
+    issueNumber: number;
     thumbnail: string;
     image: string;
     nameChannel: string;
@@ -119,6 +121,7 @@ const SendMail: React.FC<IParamTypes> = ({ data }) => {
               description: r.description,
               modified: r.modified,
               pageCount: r.pageCount,
+              issueNumber: r.issueNumber,
               thumbnail: r.thumbnail,
             })),
           });
@@ -155,6 +158,7 @@ const SendMail: React.FC<IParamTypes> = ({ data }) => {
               description: data.description,
               modified: data.modified,
               pageCount: data.pageCount,
+              issueNumber: data.issueNumber,
               thumbnail: data.thumbnail,
             },
           ],
