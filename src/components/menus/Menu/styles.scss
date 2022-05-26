@@ -1,0 +1,42 @@
+@import '../../../styles/colors.scss';
+
+.menu-list {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+
+.menu-list-li {
+  margin-right: 35px;
+  cursor: pointer;
+  height: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.menu-text {
+  color: $color-white;
+  font-weight: 500;
+  font-size: 1.6rem;
+  line-height: 23px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.menu-text:hover {
+  color: $color-red;
+  transition: color 0.2s linear;
+}
+
+.menu-text-active {
+  color: $color-red;
+}
+
+@media (max-width: 1280px) {
+  .menu-text {
+    font-size: 1.2rem;
+  }
+}

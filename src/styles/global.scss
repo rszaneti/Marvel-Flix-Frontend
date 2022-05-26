@@ -1,0 +1,153 @@
+@import './colors.scss';
+@import 'react-perfect-scrollbar/dist/css/styles.css';
+@import 'react-toastify/dist/ReactToastify.css';
+
+:root{
+  font-size: 60%;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  outline: 0;
+  box-sizing: border-box;
+}
+
+*:focus {
+  outline: 0;
+}
+
+html, body, #root {
+  height: 100vh;
+}
+
+body {
+  text-rendering: optimizeLegibility !important;
+  -webkit-font-smoothing: antialiased !important;
+  background: $color-background;
+}
+
+body, button {
+  font-size: 1.6rem;
+  font-weight: 400;
+  font-family: 'Roboto', sans-serif !important;
+}
+
+input, select, textarea {
+  font-size: 1.6rem !important;
+  font-weight: 400 !important;
+  font-family: 'Roboto', sans-serif !important;
+}
+
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
+}
+input[type="date"]
+{
+  display:block;
+
+  /* Solution 1 */
+    -webkit-appearance: textfield;
+  -moz-appearance: textfield;
+  min-height: 1.2em;
+
+  /* Solution 2 */
+  /* min-width: 96%; */
+}
+
+a {
+  text-decoration: none !important;
+}
+
+ul {
+  list-style: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+@media (min-width: 768px) {
+  :root {
+    font-size: 62.5%;
+  }
+}
+
+.global-title-h1 {
+  margin: 0 0 50px 0;
+  color: $color-white;
+  text-align: left;
+  font-size: 3.64rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+}
+
+.global-title-h4 {
+  margin: 0 0 20px 0;
+  color: $color-white;
+  text-align: left;
+  font-size: 2.5rem;
+  font-weight: 500;
+  letter-spacing: 2px;
+}
+
+.global-title-h6 {
+  margin: 0 0 20px 0;
+  color: $color-white;
+  text-align: left;
+  font-size: 1.87rem;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 2px;
+}
+
+.global-paragraph {
+  margin: 0px;
+  color: $color-white;
+  text-align: left;
+  font-size: 1.6rem;
+  font-weight: 300;
+  line-height: 20px;
+  letter-spacing: 1px;
+}
+
+.global-buttons {
+  width: 100%;
+  margin: 10px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.global-button {
+  background: $color-red;
+  color: $color-white;
+  font-weight: 400;
+  font-size: 1.6rem;
+  text-transform: uppercase;
+  border-radius: 8px;
+  border: 0;
+  padding: 8px 25px;
+  width: fit-content;
+  height: 100%;
+  max-height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.global-button:hover {
+  background: $color-burgundy;
+  transition: background 0.2s;
+}
+
+.global-button button:disabled,
+button[disabled]{
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
+}
+

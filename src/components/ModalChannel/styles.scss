@@ -1,0 +1,86 @@
+@import '../../styles/colors.scss';
+
+.modal-container {
+  width: 100%;
+  max-width: 1024px;
+  padding: 15px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modal-container img {
+  max-height: 261px;
+  border-radius: 8px;
+}
+
+.modal-title {
+  margin-top: 10px;
+}
+
+.modal-channel-box-icon {
+  width: 100%;
+  display: flex;
+  justify-content: left;
+}
+
+.modal-channel-icon {
+  margin-right: 30px;
+  color: $color-white;
+}
+
+.modal-channel-icon-check:hover {
+  color: $color-green;
+  transition: color 0.2s linear;
+}
+
+.modal-channel-icon-check-active {
+  color: $color-green;
+}
+
+.modal-channel-icon-mail:hover {
+  color: $color-red;
+  transition: color 0.2s linear;
+}
+
+.modal-channel-box-info {
+  width: 100%;
+  height: 100%;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.modal-channel-box-info p {
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+.modal-channel-box-description {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 8fr 4fr;
+  gap: 30px;
+}
+
+.modal-channel-box-description-p {
+  font-weight: 300;
+  font-size: 1.5rem;
+  line-height: 1.9rem;
+  color: $color-white;
+}
+
+.modal-channel-box-description-h6 {
+  margin-bottom: 5px;
+  color: $color-red;
+}
+
+@media (max-width: 600px) {
+  .modal-channel-box-description {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+

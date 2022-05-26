@@ -1,0 +1,36 @@
+@import '../../styles/colors.scss';
+
+.loading-container {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  row-gap: 40px;
+  justify-content: space-around;
+}
+
+@media (max-width: 1440px) {
+  .loading-container {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 1024px) {
+  .loading-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .loading-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .loading-container {
+    grid-template-columns: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
