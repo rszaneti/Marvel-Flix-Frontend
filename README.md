@@ -14,18 +14,20 @@
 
 
 <h1>Funcionalidades</h1>
-  :heavy_check_mark: Listagem das histórias em quadrinhos, personagens e criadores
 
-  :heavy_check_mark: Pesquisa individual das histórias, personagens e criadores
+  :heavy_check_mark: Listagem das histórias em quadrinhos (HQs), personagens e criadores;
 
-  :heavy_check_mark: Opção de ordenação crescente ou decrescente
+  :heavy_check_mark: Pesquisa individual das HQs, personagens e criadores;
 
-  :heavy_check_mark: Exibição de detalhes de cada item acima
+  :heavy_check_mark: Opção de ordenação crescente ou decrescente;
 
-  :heavy_check_mark: Selecionar as suas preferências
+  :heavy_check_mark: Exibição de detalhes das HQs, personagens e criadores e sua relação;
 
-  :heavy_check_mark: Enviar por e-mail individualmente ou os selecionados
+  :heavy_check_mark: Marque as HQs, personagens ou criadores de sua preferência;
 
+  :heavy_check_mark: Enviar por e-mail individualmente ou os itens selecionados;
+
+  :heavy_check_mark: Desmarcar todos os itens selecionados.
 
 <h1>Ferramentas Utilizadas</h1>
 <p align="justify">
@@ -62,7 +64,7 @@
 
   :heavy_check_mark:MD5: utilizado para criptografia;
 
-  :heavy_check_mark:React Icons: uma infinidade de icones a disposição para ser compartilhada no projeto;
+  :heavy_check_mark:React Icons: uma infinidade de ícones a disposição para ser compartilhada no projeto;
 
   :heavy_check_mark:React Router Dom: utilizado para fazer o roteamento das páginas da aplicação de forma dinâmica;
 
@@ -81,7 +83,7 @@
 
 <h1>Como rodar a aplicação</h1> :arrow_forward:
 <p align="justify">
-  <strong>Passo 1:</strong> Em seu terminal, clone o projeto:.
+  <strong>Passo 1:</strong> Em seu terminal, clone o projeto:
 </p>
 
 ```
@@ -137,7 +139,7 @@ git clone https://github.com/rszaneti/marvel-flix-backend
   Front-end:
 </p>
 
-  > gitPages -
+  > gitPages - https://rszaneti.github.io/marvel-flix-frontend/
 
 <p align="justify">
   Back-end:
