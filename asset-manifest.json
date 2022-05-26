@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/marvel-flix-frontend/static/css/main.355444ea.chunk.css",
-    "main.js": "/marvel-flix-frontend/static/js/main.e3c9ec61.chunk.js",
-    "main.js.map": "/marvel-flix-frontend/static/js/main.e3c9ec61.chunk.js.map",
+    "main.js": "/marvel-flix-frontend/static/js/main.10514bde.chunk.js",
+    "main.js.map": "/marvel-flix-frontend/static/js/main.10514bde.chunk.js.map",
     "runtime-main.js": "/marvel-flix-frontend/static/js/runtime-main.2a95fcc3.js",
     "runtime-main.js.map": "/marvel-flix-frontend/static/js/runtime-main.2a95fcc3.js.map",
     "static/css/2.cb70af6a.chunk.css": "/marvel-flix-frontend/static/css/2.cb70af6a.chunk.css",
@@ -18,6 +18,6 @@
     "static/css/2.cb70af6a.chunk.css",
     "static/js/2.1d29bef0.chunk.js",
     "static/css/main.355444ea.chunk.css",
-    "static/js/main.e3c9ec61.chunk.js"
+    "static/js/main.10514bde.chunk.js"
   ]
 }
