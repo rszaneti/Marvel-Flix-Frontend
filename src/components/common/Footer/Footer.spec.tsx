@@ -16,18 +16,23 @@ jest.mock('react-router-dom', () => {
   };
 });
 
-jest.mock('.../../../context/SendMailContext', () => {
+jest.mock('../../../context/SendMailContext', () => {
   return {
     useSendMail: () => ({
-      funcOpenModal: jest.fn(),
-      funcCloseModal: jest.fn(),
+      funcOpenModalMailFooter: jest.fn(),
+      openModalMailFooter: true,
     }),
   };
 });
 
-jest.mock('@material-ui/lab', () => {
+jest.mock('../../../context/ProfileContext', () => {
   return {
-    Pagination: jest.fn(),
+    useProfile: () => ({
+      profile: {
+        email: '',
+        name: '',
+      },
+    }),
   };
 });
 

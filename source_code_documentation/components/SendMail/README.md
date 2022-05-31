@@ -1,7 +1,7 @@
 <h1>Send Mail</h1>
 
 <p align="justify">
-  Componente para enviar os dados selecionados para o servidor de serviço de e-mail em backend. Para o envio é necessario o preenchimento de nome e e-mail. Caso esse perfil esteja já gravado no localstorage então é buscado essas duas informações e apresentado nos campos do formulário.
+  Componente para enviar os dados selecionados para o servidor de serviço de e-mail em backend. Para o envio é necessario o preenchimento de nome e e-mail. Caso esse perfil esteja já gravado em sessão no contexto ProfileContext, então é buscado essas duas informações e apresentado nos campos do formulário.
 </p>
 
 <h2>Interfaces</h2>
@@ -13,20 +13,6 @@
 | ----------- | ---------- | ------------------------------------------------------------ |
 | name        | string     | Nome para identificação no e-mail                            |
 | email       | string     | E-mail de envio                                              |
-
-<p align="justify">
-  <strong>IEmailSelect:</strong>
-</p>
-
-| Nome        | Tipo       | Descrição                                                    |
-| ----------- | ---------- | -----------------------------------------------------------  |
-| id          | number     | Identificador do registro                                    |
-| title       | string     | Título das HQs ou nome de personagens e criadores            |
-| description | string     | Descrição do item                                            |
-| modified    | Date, null | Data de modificação                                          |
-| pageCount   | number     | Número de páginas                                            |
-| issueNumber | number     | Número da edição                                             |
-| thumbnail   | string     | Imagem                                                       |
 
 <p align="justify">
   <strong>IParamTypes</strong> propriedades dentro do objeto data:{} :
@@ -55,7 +41,7 @@
 
 <h2>Funções</h2>
 <p align="justify">
-  <strong>handleSetLocalStorageProfile:</strong> utilizada para atualizar ou gravar as informações de nome e email no local storage do browser.
+  <strong>handleSetProfile:</strong> utilizada para atualizar ou gravar as informações de nome e email no contexto ProfileContext.
 </p>
 
 <p align="justify">
@@ -63,6 +49,10 @@
 </p>
 
 <h2>Hooks</h2>
+<p align="justify">
+  <strong>useProfile:</strong> utilizado para resetar, gravar e mostrar os dados em sessão de nome e e-mail.
+</p>
+
 <p align="justify">
   <strong>useSendMail:</strong> utilizado para abrir e fechar o modal de envio de e-email de vários locais da aplicação.
 </p>

@@ -1,17 +1,13 @@
-import React, {
-  useCallback,
-  useState,
-  useContext,
-  useRef,
-  useEffect,
-} from 'react';
+import React, { useCallback, useContext } from 'react';
 import { CircularProgress } from '@material-ui/core';
 import { toast } from 'react-toastify';
-import { Formik, Form, FormikProps } from 'formik';
+import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 
 // Context
+import { useChannelSelectedItems } from '../../context/ChannelSelectedItemsContext';
 import { ErrorContext } from '../../context/ErrorContext';
+import { useProfile } from '../../context/ProfileContext';
 import { useSendMail } from '../../context/SendMailContext';
 
 // Services
@@ -22,21 +18,9 @@ import { CssTextField } from '../../styles/globalMaterialUi';
 import './styles.scss';
 import '../../styles/global.scss';
 
-type FormModel = any;
-
 interface IValuesForm {
   name: string;
   email: string;
-}
-
-interface IEmailSelect {
-  id: string;
-  title: string;
-  description: string;
-  modified: string;
-  pageCount: number;
-  issueNumber: number;
-  thumbnail: string;
 }
 
 interface IParamTypes {
@@ -58,18 +42,15 @@ interface IParamTypes {
 }
 
 const SendMail: React.FC<IParamTypes> = ({ data }) => {
-  const formikRef = useRef<FormikProps<FormModel>>(null);
-
   // Context
+  const { channelSelectedItems } = useChannelSelectedItems();
   const { ErrorMessage } = useContext(ErrorContext);
   const {
     funcOpenModalMailModalChannel,
     funcOpenModalMailChannel,
     funcOpenModalMailFooter,
   } = useSendMail();
-
-  // State
-  const [profile, setProfile] = useState<IValuesForm>({} as IValuesForm);
+  const { insert, reset, profile } = useProfile();
 
   const schema = Yup.object().shape({
     name: Yup.string().required('O primeiro nome é obrigatório.'),
@@ -78,34 +59,26 @@ const SendMail: React.FC<IParamTypes> = ({ data }) => {
       .required('O e-mail é obrigatório.'),
   });
 
-  useEffect(() => {
-    try {
-      // Get local storage profile
-      const profileId = localStorage.getItem('@TestSoftDesign:profile');
+  const handleSetProfile = useCallback(
+    (values: IValuesForm) => {
+      const { name, email } = values;
 
-      let dataProfilelId: IValuesForm = {} as IValuesForm;
-
-      if (profileId) {
-        dataProfilelId = JSON.parse(profileId);
-        setProfile(dataProfilelId);
-      }
-    } catch (err) {
-      ErrorMessage(err);
-    }
-  }, [ErrorMessage]);
-
-  const handleSetLocalStorageProfile = useCallback((values: IValuesForm) => {
-    localStorage.removeItem('@TestSoftDesign:profile');
-    localStorage.setItem('@TestSoftDesign:profile', JSON.stringify(values));
-  }, []);
+      reset();
+      insert({
+        name,
+        email,
+      });
+    },
+    [reset, insert],
+  );
 
   const handleSendEmail = useCallback(
     async (values: IValuesForm) => {
-      const comicsId = localStorage.getItem(`@TestSoftDesign:${data.channel}`);
+      const channelId = channelSelectedItems.filter(
+        f => f.channel === data.channel,
+      );
 
-      if (comicsId) {
-        const dataComicsId: IEmailSelect[] = JSON.parse(comicsId);
-
+      if (channelId) {
         // sendmail
         try {
           const { name, email } = values;
@@ -116,7 +89,7 @@ const SendMail: React.FC<IParamTypes> = ({ data }) => {
             logo:
               'https://eadctrainingplatform.blob.core.windows.net/teste/logo-marvel-flix.png',
             channel: data.channel,
-            list: dataComicsId.map(r => ({
+            list: channelId.map(r => ({
               title: r.title,
               description: r.description,
               modified: r.modified,
@@ -133,12 +106,12 @@ const SendMail: React.FC<IParamTypes> = ({ data }) => {
           ErrorMessage(err);
         }
       } else {
-        toast.info('Não há itens selecionados para enviar e-mail.', {
+        toast.error('Não há itens selecionados para enviar e-mail.', {
           position: toast.POSITION.TOP_CENTER,
         });
       }
     },
-    [ErrorMessage, data],
+    [ErrorMessage, data, channelSelectedItems],
   );
 
   const handleSendSimpleEmail = useCallback(
@@ -181,8 +154,7 @@ const SendMail: React.FC<IParamTypes> = ({ data }) => {
       </div>
 
       <Formik
-        innerRef={formikRef}
-        enableReinitialize={profile.email !== ''}
+        enableReinitialize={!profile}
         initialValues={{
           name: profile.name !== '' ? profile.name : '',
           email: profile.email !== '' ? profile.email : '',
@@ -191,7 +163,7 @@ const SendMail: React.FC<IParamTypes> = ({ data }) => {
         onSubmit={async (values: IValuesForm, { setSubmitting }) => {
           setSubmitting(true);
 
-          handleSetLocalStorageProfile(values);
+          handleSetProfile(values);
 
           if (data.multiple) {
             await handleSendEmail(values);

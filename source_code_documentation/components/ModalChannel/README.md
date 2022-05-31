@@ -68,7 +68,7 @@
 
 <h2>Funções</h2>
 <p align="justify">
-  <strong>handleSetLocalStorage:</strong> utilizada para gravar os itens marcados pelo usuário para o envio de e-mail posterior.
+  <strong>handleChannelSelectedItems:</strong> utilizada para gravar os itens marcados pelo usuário para o envio de e-mail posterior.
 </p>
 
 <p align="justify">
@@ -78,4 +78,8 @@
 <h2>Hooks</h2>
 <p align="justify">
   <strong>useSendMail:</strong> utilizado para abrir e fechar o modal de envio de e-email de vários locais da aplicação.
+</p>
+
+<p align="justify">
+  <strong>useChannelSelectedItems:</strong> utilizado para gravar, resetar e mostrar todos os itens selecionados dos canais pelo usuário.
 </p>

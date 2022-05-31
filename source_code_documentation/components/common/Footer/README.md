@@ -39,10 +39,22 @@
 
 <h2>Funções</h2>
 <p align="justify">
-  <strong>handleOpenModalMail:</strong> abre o modal para envio de todos os e-mails selecionados gravados no localstorage. Este chama o componente SendMail passando os parametros na propriedade "data" setando somente a propriedade "multiple" como TRUE, deixando o restante vazio, pois será buscado no componente SendMail os itens selecionados no localstorage.
+  <strong>handleOpenModalMail:</strong> abre o modal para envio de todos os e-mails selecionados gravados no contexto ChannelSelectedItemsContext. Esta função chama o componente SendMail passando os parametros na propriedade "data" setando somente a propriedade "multiple" como TRUE, deixando o restante vazio, pois será buscado no componente SendMail os itens selecionados no contexto ChannelSelectedItemsContext.
+</p>
+
+<p align="justify">
+  <strong>handleDeselectAllItens:</strong> Desmarca todos os itens de todos os canais..
 </p>
 
 <h2>Hooks</h2>
 <p align="justify">
   <strong>useSendMail:</strong> utilizado para abrir e fechar o modal de envio de e-email de vários locais da aplicação.
+</p>
+
+<p align="justify">
+  <strong>useDeselectAll:</strong> utilizado para desmarcar todos os itens selecionados.
+</p>
+
+<p align="justify">
+  <strong>useChannelSelectedItems:</strong> utilizado para gravar, resetar e mostrar todos os itens selecionados dos canais pelo usuário.
 </p>

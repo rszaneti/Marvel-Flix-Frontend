@@ -12,6 +12,8 @@ describe('Header Component', () => {
   it('Should be able to header', () => {
     render(<Header />);
 
+    screen.logTestingPlaygroundURL();
+
     expect(screen.getByTestId('header-menu')).toBeInTheDocument();
     expect(screen.getByTestId('header-side-list')).toBeInTheDocument();
   });

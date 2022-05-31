@@ -89,9 +89,6 @@
   <strong>[text, setText]: String</strong>: grava o texto digitado no campo da pesquisa. Enquanto estiver digitando não aciona a busca.
 </p>
 <p align="justify">
-  <strong>[searchText, setSearchText]: String</strong>: após digitado, grava-se o texto da digitado e aciona a busca na API da marvel.
-</p>
-<p align="justify">
   <strong>[page, setPage]: Number</strong>: grava o número da página selecionado.
 </p>
 <p align="justify">
@@ -100,18 +97,25 @@
 <p align="justify">
   <strong>[order, setOrder]: String</strong>: seleciona qual o tipo de ordem, ascendente ou descendete, e aciona o filtro na API da marvel.
 </p>
+<p align="justify">
+  <strong>[timer, setTimer]: Number</strong>: utilizado para aguardar até que o usuário finalize a digitação para pesquisar automaticamente.
+</p>
 
 <h2>Funções</h2>
+<p align="justify">
+  <strong>loadList:</strong> utilizada carregar os dados da API da Marvel e marcar os itens selecionados do contexto ChannelSelectedItems. Recebe como parâmetos as variáveis: varOrder (tipo de ordenação - string), varOrderBy (campo para ordenar - string), varPage (número da página - number), varText (texto digitado na pesquisa - ), varListChannelSelectedItems (lista dos itens selecionados do contexto ChannelSelectedItems).
+</p>
+
 <p align="justify">
   <strong>handleChangePage:</strong> utilizada alterar a página gravando o valor na variável "page".
 </p>
 
 <p align="justify">
-  <strong>handleSetLocalStorage:</strong> utilizada para gravar os itens marcados pelo usuário para o envio de e-mail posterior.
+  <strong>handleChannelSelectedItems:</strong> utilizada para gravar os itens marcados pelo usuário para o envio de e-mail posterior.
 </p>
 
 <p align="justify">
-  <strong>handleChangeOrder:</strong> utilizada para selecionar a ordem na variável "order".
+  <strong>handleC hangeOrder:</strong> utilizada para selecionar a ordem na variável "order".
 </p>
 
 <p align="justify">
@@ -119,11 +123,7 @@
 </p>
 
 <p align="justify">
-  <strong>handleChangeSearch:</strong> utilizada para selecionar o texto digitado no campo de pesquisar na variável "text".
-</p>
-
-<p align="justify">
-  <strong>handleSearch:</strong> utilizada para gravar o texto digitado na variável "searchText" e acionar a pesquisa na API.
+  <strong>handleChangeSearch:</strong> utilizada para selecionar o texto digitado no campo de pesquisar na variável "text" acionando a pesquisa automaticamente com a variável de estado "timer".
 </p>
 
 <p align="justify">
@@ -141,4 +141,12 @@
 <h2>Hooks</h2>
 <p align="justify">
   <strong>useSendMail:</strong> utilizado para abrir e fechar o modal de envio de e-email de vários locais da aplicação.
+</p>
+
+<p align="justify">
+  <strong>useDeselectAll:</strong> utilizado para desmarcar todos os itens selecionados.
+</p>
+
+<p align="justify">
+  <strong>useChannelSelectedItems:</strong> utilizado para gravar, resetar e mostrar todos os itens selecionados dos canais pelo usuário.
 </p>

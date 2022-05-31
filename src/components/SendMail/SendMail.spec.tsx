@@ -3,25 +3,34 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import SendMail from '.';
 
 const propsParams = {
-  data: {
-    multiple: true,
-    channel: 'channel',
-    id: 0,
-    title: 'title',
-    description: 'description',
-    modified: '',
-    pageCount: 0,
-    issueNumber: 0,
-    thumbnail: 'thumbnail',
-    image: 'image',
-    nameChannel: 'nameChannel',
-    name: ['name'],
-    active: false,
-  },
+  multiple: true,
+  channel: 'channel',
+  id: 0,
+  title: 'title',
+  description: 'description',
+  modified: '',
+  pageCount: 0,
+  issueNumber: 0,
+  thumbnail: 'thumbnail',
+  image: 'image',
+  nameChannel: 'nameChannel',
+  name: ['name'],
+  active: false,
 };
 
+jest.mock('../../context/ProfileContext', () => {
+  return {
+    useProfile: () => ({
+      profile: {
+        email: '',
+        name: '',
+      },
+    }),
+  };
+});
+
 describe('SendMail Component', () => {
-  it('Should be able send mail', async () => {
+  it('They must contain the fields in the sendmail form', async () => {
     render(<SendMail data={propsParams} />);
 
     const emailField = screen.getByRole('textbox', {

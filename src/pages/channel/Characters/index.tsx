@@ -13,6 +13,7 @@ import { FaCheckCircle } from 'react-icons/fa';
 import { HiMail } from 'react-icons/hi';
 
 // Context
+import { useChannelSelectedItems } from '../../../context/ChannelSelectedItemsContext';
 import { useDeselectAll } from '../../../context/DeselectAllContext';
 import { ErrorContext } from '../../../context/ErrorContext';
 import { useSendMail } from '../../../context/SendMailContext';
@@ -32,7 +33,7 @@ import {
   CssPagination,
   CssModalStyles,
 } from '../../../styles/globalMaterialUi';
-import './styles.scss';
+import '../stylesChannels.scss';
 import '../../../styles/global.scss';
 
 interface IComicSummary {
@@ -93,7 +94,8 @@ interface ICharacterDataWrapper {
 }
 
 interface IEmailSelect {
-  id: string;
+  id: number;
+  channel: string;
   title: string;
   description: string;
   thumbnail: string;
@@ -126,6 +128,7 @@ const Characters: React.FC<IParamTypes> = ({ channel }) => {
   const classesModal = CssModalStyles();
 
   // Context
+  const { channelSelectedItems, insert, reset } = useChannelSelectedItems();
   const { deselectAll } = useDeselectAll();
   const { ErrorMessage } = useContext(ErrorContext);
   const { funcOpenModalMailChannel, openModalMailChannel } = useSendMail();
@@ -141,37 +144,59 @@ const Characters: React.FC<IParamTypes> = ({ channel }) => {
     {} as ICharacterDataWrapper,
   );
   const [text, setText] = useState('');
-  const [searchText, setSearchText] = useState('');
   const [page, setPage] = useState(1);
   const [orderBy, setOrderBy] = useState('name');
   const [order, setOrder] = useState('');
 
+  const [timer, setTimer] = useState(0);
+
   useEffect(() => {
-    async function loadList() {
+    if (list.data) {
+      const channelId = channelSelectedItems.filter(
+        f => f.channel === channel || 'comics',
+      );
+
+      const data: ICharacterDataWrapper = {
+        ...list,
+        data: {
+          ...list.data,
+          results: list.data.results.map(r => ({
+            ...r,
+            active: Boolean(channelId.find(id => id.id === r.id)),
+          })),
+        },
+      };
+
+      setList(data);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [deselectAll, channelSelectedItems, channel]);
+
+  const loadList = useCallback(
+    async (
+      varOrder: string,
+      varOrderBy: string,
+      varPage: number,
+      varText: string,
+      varListChannelSelectedItems: IEmailSelect[],
+    ) => {
       try {
-        // Get local storage id selected
         setLoading(true);
-        const channelId = localStorage.getItem(
-          `@TestSoftDesign:${channel || 'comics'}`,
+
+        const channelId = varListChannelSelectedItems.filter(
+          f => f.channel === channel || 'comics',
         );
 
-        let dataChannelId: IEmailSelect[] = [];
-
-        if (channelId) {
-          dataChannelId = JSON.parse(channelId);
-        }
-
-        // Get channel api
         const paramsObj = {
-          orderBy: `${order}${orderBy}`,
+          orderBy: `${varOrder}${varOrderBy}`,
           limit: 20,
-          offset: (page - 1) * 20,
+          offset: (varPage - 1) * 20,
         };
 
         let paramsSearchText = {};
-        if (searchText) {
+        if (varText) {
           paramsSearchText = {
-            nameStartsWith: searchText,
+            nameStartsWith: varText,
           };
         }
 
@@ -187,7 +212,7 @@ const Characters: React.FC<IParamTypes> = ({ channel }) => {
             ...response.data.data,
             results: response.data.data.results.map(r => ({
               ...r,
-              active: Boolean(dataChannelId.find(id => Number(id.id) === r.id)),
+              active: Boolean(channelId.find(id => id.id === r.id)),
             })),
           },
         });
@@ -196,19 +221,28 @@ const Characters: React.FC<IParamTypes> = ({ channel }) => {
       } finally {
         setLoading(false);
       }
-    }
-
-    loadList();
-  }, [ErrorMessage, channel, page, order, orderBy, searchText, deselectAll]);
-
-  const handleChangePage = useCallback(
-    (event: ChangeEvent<unknown>, value: number) => {
-      setPage(value);
     },
-    [],
+    [ErrorMessage, channel],
   );
 
-  const handleSetLocalStorage = useCallback(
+  useEffect(() => {
+    async function load() {
+      await loadList(order, orderBy, page, text, channelSelectedItems);
+    }
+
+    load();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loadList, order, orderBy]);
+
+  const handleChangePage = useCallback(
+    async (event: ChangeEvent<unknown>, value: number) => {
+      await loadList(order, orderBy, value, text, channelSelectedItems);
+      setPage(value);
+    },
+    [order, orderBy, text, channelSelectedItems, loadList],
+  );
+
+  const handleChannelSelectedItems = useCallback(
     (
       id: number,
       title: string,
@@ -218,25 +252,21 @@ const Characters: React.FC<IParamTypes> = ({ channel }) => {
       pageCount: number,
       issueNumber: number,
     ) => {
-      const channelId = localStorage.getItem(
-        `@TestSoftDesign:${channel || 'comics'}`,
+      const channelId = channelSelectedItems.filter(
+        f => f.channel === channel || 'comics',
       );
 
       if (channelId) {
-        const dataChannelId: IEmailSelect[] = JSON.parse(channelId);
-
-        const existData = dataChannelId.filter(r => r.id === String(id));
+        const existData = channelId.filter(r => r.id === id);
 
         if (existData.length) {
-          const dataNewChannelId: IEmailSelect[] = dataChannelId.filter(r =>
-            String(id).indexOf(r.id),
+          // Remove item
+          const dataNewChannelId = channelId.filter(r =>
+            String(id).indexOf(String(r.id)),
           );
 
-          localStorage.removeItem(`@TestSoftDesign:${channel || 'comics'}`);
-          localStorage.setItem(
-            `@TestSoftDesign:${channel || 'comics'}`,
-            JSON.stringify(dataNewChannelId),
-          );
+          reset();
+          insert(dataNewChannelId);
 
           // state list manipulation;
           const findIndex = list.data.results.findIndex(r => r.id === id);
@@ -253,8 +283,10 @@ const Characters: React.FC<IParamTypes> = ({ channel }) => {
 
           setList(data);
         } else {
-          dataChannelId.push({
-            id: String(id),
+          // Add item
+          channelId.push({
+            id,
+            channel: channel || 'comics',
             title,
             description,
             thumbnail,
@@ -267,10 +299,7 @@ const Characters: React.FC<IParamTypes> = ({ channel }) => {
             issueNumber,
           });
 
-          localStorage.setItem(
-            `@TestSoftDesign:${channel || 'comics'}`,
-            JSON.stringify(dataChannelId),
-          );
+          insert(channelId);
 
           // state list manipulation;
           const findIndex = list.data.results.findIndex(r => r.id === id);
@@ -288,9 +317,11 @@ const Characters: React.FC<IParamTypes> = ({ channel }) => {
           setList(data);
         }
       } else {
+        // Add first item
         const dataChannelId: IEmailSelect[] = [
           {
-            id: String(id),
+            id,
+            channel: channel || 'comics',
             title,
             description,
             thumbnail,
@@ -304,10 +335,7 @@ const Characters: React.FC<IParamTypes> = ({ channel }) => {
           },
         ];
 
-        localStorage.setItem(
-          `@TestSoftDesign:${channel || 'comics'}`,
-          JSON.stringify(dataChannelId),
-        );
+        insert(dataChannelId);
 
         // state list manipulation;
         const findIndex = list.data.results.findIndex(r => r.id === id);
@@ -325,7 +353,7 @@ const Characters: React.FC<IParamTypes> = ({ channel }) => {
         setList(data);
       }
     },
-    [channel, list],
+    [channel, list, insert, reset, channelSelectedItems],
   );
 
   const handleChangeOrder = useCallback(async (value: string) => {
@@ -336,18 +364,20 @@ const Characters: React.FC<IParamTypes> = ({ channel }) => {
     setOrderBy(value);
   }, []);
 
-  const handleChangeSearch = useCallback(async (e: string) => {
-    setText(e);
-  }, []);
+  const handleChangeSearch = useCallback(
+    async (e: string) => {
+      setText(e);
 
-  const handleSearch = useCallback(
-    async (e: any) => {
-      if (e.key === 'Enter') {
+      clearTimeout(timer);
+
+      const newTimer = setTimeout(async () => {
         setPage(1);
-        setSearchText(text);
-      }
+        await loadList(order, orderBy, 1, e, channelSelectedItems);
+      }, 1000);
+
+      setTimer(Number(newTimer));
     },
-    [text],
+    [timer, loadList, order, orderBy, channelSelectedItems],
   );
 
   const handleOpenModal = useCallback(
@@ -503,7 +533,6 @@ const Characters: React.FC<IParamTypes> = ({ channel }) => {
                         handleChangeSearch(e.target.value);
                       }}
                       onBlur={handleBlur}
-                      onKeyPress={handleSearch}
                     />
                   </li>
                   <li>
@@ -569,88 +598,49 @@ const Characters: React.FC<IParamTypes> = ({ channel }) => {
         </>
       ) : (
         <>
-          <ul className="channel-list">
-            {list.data &&
-              list.data.results.map(r => (
-                <li className="channel-list-li" key={r.id}>
-                  <img
-                    src={`${r.thumbnail.path}/landscape_xlarge.${r.thumbnail.extension}`}
-                    alt={r.name}
-                    aria-hidden="true"
-                    onClick={() =>
-                      handleOpenModal(
-                        r.id,
-                        r.name,
-                        r.description,
-                        r.modified,
-                        0,
-                        0,
-                        `${r.thumbnail.path}/landscape_xlarge.${r.thumbnail.extension}`,
-                        `${r.thumbnail.path}/landscape_incredible.${r.thumbnail.extension}`,
-                        r.comics.items.length ? 'Histórias em Quadrinhos' : '',
-                        r.comics.items.length ? r.comics.items : [],
-                        r.active,
-                      )
-                    }
-                  />
-                  <div className="channel-box-info">
-                    <p
-                      className="global-paragraph"
-                      aria-hidden="true"
-                      onClick={() =>
-                        handleOpenModal(
-                          r.id,
-                          r.name,
-                          r.description,
-                          r.modified,
-                          0,
-                          0,
-                          `${r.thumbnail.path}/landscape_xlarge.${r.thumbnail.extension}`,
-                          `${r.thumbnail.path}/landscape_incredible.${r.thumbnail.extension}`,
-                          r.comics.items.length
-                            ? 'Histórias em Quadrinhos'
-                            : '',
-                          r.comics.items.length ? r.comics.items : [],
-                          r.active,
-                        )
-                      }
-                    >
-                      {r.name}
-                    </p>
-                    <div className="channel-box-icon">
-                      <CssTooltip title="SELECIONE PARA ENVIO EMAIL">
-                        <IconButton
-                          size="small"
-                          aria-label="SELECIONE PARA ENVIO EMAIL"
+          {list.data ? (
+            !list.data.count ? (
+              <div className="no-result">
+                <div className="no-result-content">
+                  <h4 className="global-title-h4">
+                    Nenhuma história em quadrinho encontrada para &quot;
+                    {text}&quot;
+                  </h4>
+                </div>
+              </div>
+            ) : (
+              <ul className="channel-list">
+                {list.data.results.map(r => (
+                  <li className="channel-list" key={r.id}>
+                    <div className="channel-list-content">
+                      <img
+                        src={`${r.thumbnail.path}/landscape_xlarge.${r.thumbnail.extension}`}
+                        alt={r.name}
+                        aria-hidden="true"
+                        onClick={() =>
+                          handleOpenModal(
+                            r.id,
+                            r.name,
+                            r.description,
+                            r.modified,
+                            0,
+                            0,
+                            `${r.thumbnail.path}/landscape_xlarge.${r.thumbnail.extension}`,
+                            `${r.thumbnail.path}/landscape_incredible.${r.thumbnail.extension}`,
+                            r.comics.items.length
+                              ? 'Histórias em Quadrinhos'
+                              : '',
+                            r.comics.items.length ? r.comics.items : [],
+                            r.active,
+                          )
+                        }
+                      />
+                      <div className="channel-box-info">
+                        <p
+                          className="global-paragraph"
+                          aria-hidden="true"
                           onClick={() =>
-                            handleSetLocalStorage(
-                              r.id,
-                              r.name,
-                              r.description,
-                              `${r.thumbnail.path}/landscape_xlarge.${r.thumbnail.extension}`,
-                              r.modified,
-                              0,
-                              0,
-                            )
-                          }
-                        >
-                          <FaCheckCircle
-                            className={`channel-icon ${
-                              r.active
-                                ? 'channel-icon-check-active'
-                                : 'channel-icon-check'
-                            }`}
-                            size="30"
-                          />
-                        </IconButton>
-                      </CssTooltip>
-
-                      <CssTooltip title="ENVIAR E-MAIL">
-                        <IconButton
-                          size="small"
-                          aria-label="ENVIAR E-MAIL"
-                          onClick={() =>
-                            handleOpenModalMail(
+                            handleOpenModal(
                               r.id,
                               r.name,
                               r.description,
@@ -659,23 +649,78 @@ const Characters: React.FC<IParamTypes> = ({ channel }) => {
                               0,
                               `${r.thumbnail.path}/landscape_xlarge.${r.thumbnail.extension}`,
                               `${r.thumbnail.path}/landscape_incredible.${r.thumbnail.extension}`,
-                              r.comics.items.length ? 'Personagens' : '',
+                              r.comics.items.length
+                                ? 'Histórias em Quadrinhos'
+                                : '',
                               r.comics.items.length ? r.comics.items : [],
                               r.active,
                             )
                           }
                         >
-                          <HiMail
-                            className="channel-icon channel-icon-mail"
-                            size="40"
-                          />
-                        </IconButton>
-                      </CssTooltip>
+                          {r.name}
+                        </p>
+                        <div className="channel-box-icon">
+                          <CssTooltip title="SELECIONE PARA ENVIO EMAIL">
+                            <IconButton
+                              size="small"
+                              aria-label="SELECIONE PARA ENVIO EMAIL"
+                              onClick={() =>
+                                handleChannelSelectedItems(
+                                  r.id,
+                                  r.name,
+                                  r.description,
+                                  `${r.thumbnail.path}/landscape_xlarge.${r.thumbnail.extension}`,
+                                  r.modified,
+                                  0,
+                                  0,
+                                )
+                              }
+                            >
+                              <FaCheckCircle
+                                className={`channel-icon ${
+                                  r.active
+                                    ? 'channel-icon-check-active'
+                                    : 'channel-icon-check'
+                                }`}
+                                size="30"
+                              />
+                            </IconButton>
+                          </CssTooltip>
+
+                          <CssTooltip title="ENVIAR E-MAIL">
+                            <IconButton
+                              size="small"
+                              aria-label="ENVIAR E-MAIL"
+                              onClick={() =>
+                                handleOpenModalMail(
+                                  r.id,
+                                  r.name,
+                                  r.description,
+                                  r.modified,
+                                  0,
+                                  0,
+                                  `${r.thumbnail.path}/landscape_xlarge.${r.thumbnail.extension}`,
+                                  `${r.thumbnail.path}/landscape_incredible.${r.thumbnail.extension}`,
+                                  r.comics.items.length ? 'Personagens' : '',
+                                  r.comics.items.length ? r.comics.items : [],
+                                  r.active,
+                                )
+                              }
+                            >
+                              <HiMail
+                                className="channel-icon channel-icon-mail"
+                                size="40"
+                              />
+                            </IconButton>
+                          </CssTooltip>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </li>
-              ))}
-          </ul>
+                  </li>
+                ))}
+              </ul>
+            )
+          ) : null}
 
           {list.data ? (
             <div className="pagination">

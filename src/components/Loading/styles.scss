@@ -4,6 +4,7 @@
   width: 100%;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
+  column-gap: 10px;
   row-gap: 40px;
   justify-content: space-around;
 }
@@ -14,13 +15,13 @@
   }
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1023px) {
   .loading-container {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .loading-container {
     grid-template-columns: repeat(2, 1fr);
   }

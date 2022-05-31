@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { Modal, Fade, Backdrop } from '@material-ui/core';
 
 // Context
+import { useChannelSelectedItems } from '../../../context/ChannelSelectedItemsContext';
 import { useSendMail } from '../../../context/SendMailContext';
 import { useDeselectAll } from '../../../context/DeselectAllContext';
 
@@ -40,8 +41,9 @@ const Footer: React.FC = () => {
   const { channel } = useParams<IParamTypes>();
 
   // Context
-  const { funcOpenModalMailFooter, openModalMailFooter } = useSendMail();
+  const { reset } = useChannelSelectedItems();
   const { handleDeselectAll } = useDeselectAll();
+  const { funcOpenModalMailFooter, openModalMailFooter } = useSendMail();
 
   // State
   const [dataModalMail, setDataModalMail] = useState<IParamsModal>(
@@ -69,11 +71,9 @@ const Footer: React.FC = () => {
   }, [channel, funcOpenModalMailFooter]);
 
   const handleDeselectAllItens = useCallback(async () => {
-    localStorage.removeItem('@TestSoftDesign:comics');
-    localStorage.removeItem('@TestSoftDesign:characters');
-    localStorage.removeItem('@TestSoftDesign:creators');
+    reset();
     handleDeselectAll();
-  }, [handleDeselectAll]);
+  }, [handleDeselectAll, reset]);
 
   return (
     <div className="footer-container">

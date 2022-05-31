@@ -8,6 +8,14 @@ jest.mock('react-router-dom', () => {
   };
 });
 
+jest.mock('../../../context/ActiveMenuContext', () => {
+  return {
+    useActiveMenu: () => ({
+      handleActiveMenu: jest.fn(),
+    }),
+  };
+});
+
 describe('Menu Component', () => {
   it('List menus correctly', () => {
     render(<Menu />);

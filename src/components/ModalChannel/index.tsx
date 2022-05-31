@@ -5,6 +5,7 @@ import { FaCheckCircle, FaRegCalendarAlt } from 'react-icons/fa';
 import { HiMail } from 'react-icons/hi';
 
 // Context
+import { useChannelSelectedItems } from '../../context/ChannelSelectedItemsContext';
 import { useSendMail } from '../../context/SendMailContext';
 
 // Components
@@ -16,7 +17,8 @@ import './styles.scss';
 import '../../styles/global.scss';
 
 interface IEmailSelect {
-  id: string;
+  id: number;
+  channel: string;
   title: string;
   description: string;
   thumbnail: string;
@@ -62,6 +64,7 @@ const ModalChannel: React.FC<IParamTypes> = ({ data }) => {
   const classesModal = CssModalStyles();
 
   // Context
+  const { insert, reset, channelSelectedItems } = useChannelSelectedItems();
   const {
     funcOpenModalMailModalChannel,
     openModalMailModalChannel,
@@ -73,30 +76,29 @@ const ModalChannel: React.FC<IParamTypes> = ({ data }) => {
     {} as IParamsModal,
   );
 
-  const handleSetLocalStorage = useCallback(() => {
-    const channelId = localStorage.getItem(`@TestSoftDesign:${data.channel}`);
+  const handleChannelSelectedItems = useCallback(() => {
+    const channelId = channelSelectedItems.filter(
+      f => f.channel === data.channel,
+    );
 
     if (channelId) {
-      const dataChannelId: IEmailSelect[] = JSON.parse(channelId);
-
-      const existData = dataChannelId.filter(r => r.id === String(data.id));
+      const existData = channelId.filter(r => r.id === data.id);
 
       if (existData.length) {
-        const dataNewChannelId: IEmailSelect[] = dataChannelId.filter(r =>
-          String(data.id).indexOf(r.id),
+        // Remove item
+        const dataNewChannelId = channelId.filter(r =>
+          String(data.id).indexOf(String(r.id)),
         );
 
-        localStorage.removeItem(`@TestSoftDesign:${data.channel}`);
-        localStorage.setItem(
-          `@TestSoftDesign:${data.channel}`,
-          JSON.stringify(dataNewChannelId),
-        );
+        reset();
+        insert(dataNewChannelId);
 
-        // state list manipulation;
         setActive(false);
       } else {
-        dataChannelId.push({
-          id: String(data.id),
+        // Add item
+        channelId.push({
+          id: data.id,
+          channel: data.channel,
           title: data.title,
           description: data.description,
           thumbnail: data.thumbnail,
@@ -105,17 +107,16 @@ const ModalChannel: React.FC<IParamTypes> = ({ data }) => {
           issueNumber: data.issueNumber,
         });
 
-        localStorage.setItem(
-          `@TestSoftDesign:${data.channel}`,
-          JSON.stringify(dataChannelId),
-        );
+        insert(channelId);
 
         setActive(true);
       }
     } else {
+      // Add first item
       const dataChannelId: IEmailSelect[] = [
         {
-          id: String(data.id),
+          id: data.id,
+          channel: data.channel,
           title: data.title,
           description: data.description,
           thumbnail: data.thumbnail,
@@ -125,15 +126,11 @@ const ModalChannel: React.FC<IParamTypes> = ({ data }) => {
         },
       ];
 
-      localStorage.setItem(
-        `@TestSoftDesign:${data.channel}`,
-        JSON.stringify(dataChannelId),
-      );
+      insert(dataChannelId);
 
-      // state list manipulation;
       setActive(true);
     }
-  }, [data]);
+  }, [data, insert, reset, channelSelectedItems]);
 
   const handleOpenModalMail = useCallback(() => {
     setDataModalMail({
@@ -187,7 +184,7 @@ const ModalChannel: React.FC<IParamTypes> = ({ data }) => {
           <IconButton
             size="small"
             aria-label="SELECIONE PARA ENVIO EMAIL"
-            onClick={handleSetLocalStorage}
+            onClick={handleChannelSelectedItems}
           >
             <FaCheckCircle
               className={`modal-channel-icon ${

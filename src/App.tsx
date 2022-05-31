@@ -9,8 +9,10 @@ import Routes from './routes';
 
 // Context
 import { ActiveMenuProvider } from './context/ActiveMenuContext';
+import { ChannelSelectedItemsProvider } from './context/ChannelSelectedItemsContext';
 import { DeselectAllProvider } from './context/DeselectAllContext';
 import { ErrorProvider } from './context/ErrorContext';
+import { ProfileProvider } from './context/ProfileContext';
 import { SendMailProvider } from './context/SendMailContext';
 
 // Styles
@@ -23,13 +25,17 @@ const App: React.FC = () => {
     <BrowserRouter>
       <ThemeProvider theme={theme}>
         <ErrorProvider>
-          <SendMailProvider>
-            <ActiveMenuProvider>
-              <DeselectAllProvider>
-                <Routes />
-              </DeselectAllProvider>
-            </ActiveMenuProvider>
-          </SendMailProvider>
+          <ChannelSelectedItemsProvider>
+            <ProfileProvider>
+              <SendMailProvider>
+                <ActiveMenuProvider>
+                  <DeselectAllProvider>
+                    <Routes />
+                  </DeselectAllProvider>
+                </ActiveMenuProvider>
+              </SendMailProvider>
+            </ProfileProvider>
+          </ChannelSelectedItemsProvider>
         </ErrorProvider>
         <ToastContainer autoClose={4000} />
       </ThemeProvider>

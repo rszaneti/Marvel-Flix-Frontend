@@ -11,6 +11,7 @@
     "@syncfusion/ej2-react-barcode-generator": "^19.1.63",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
+    "@testing-library/react-hooks": "^8.0.0",
     "@testing-library/user-event": "^12.1.10",
     "@tinymce/tinymce-react": "^3.12.4",
     "@types/jest": "^26.0.15",
@@ -98,6 +99,7 @@
     "eslint-plugin-react-hooks": "^4",
     "gh-pages": "^4.0.0",
     "prettier": "^2.2.1",
+    "react-test-renderer": "^18.1.0",
     "ts-jest": "^28.0.3"
   }
 }
