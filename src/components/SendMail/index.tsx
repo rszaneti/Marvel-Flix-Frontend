@@ -78,7 +78,7 @@ const SendMail: React.FC<IParamTypes> = ({ data }) => {
         f => f.channel === data.channel,
       );
 
-      if (channelId) {
+      if (channelId.length) {
         // sendmail
         try {
           const { name, email } = values;
